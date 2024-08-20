@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 
+
 import {
   Container,
   TextField,
@@ -18,7 +19,6 @@ import {
   DialogActions,
 } from '@mui/material'
 import { collection, doc, getDoc, writeBatch } from 'firebase/firestore'
-import { db } from './firebase';
 export default function Generate() {
   const [text, setText] = useState('')
   const [flashcards, setFlashcards] = useState([])

@@ -1,20 +1,29 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, Grid } from '@mui/material';
-import { ClerkProvider, SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { db } from '../firebase';
-import { SWRConfig } from 'swr';
+import { AppBar, Toolbar, Typography, Button, Box, Grid, Card, CardContent } from '@mui/material';
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import Link from 'next/link';
+import './globals.css'; // Import the global stylesheet
+
 export default function HomePage() {
   return (
     <div>
       {/* Header and Navigation */}
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
         <Toolbar>
-          <Typography variant="h6" style={{ flexGrow: 1 }}>
-            Flashcard SaaS
+          <Typography variant="h6" className="glassy-header" style={{ flexGrow: 1 }}>
+            FlashWise
           </Typography>
           <SignedOut>
-            <Button color="inherit" href="/sign-in">Login</Button>
-            <Button color="inherit" href="/sign-up">Sign Up</Button>
+            <Button className="glassy-button">
+              <Link href="/sign-in" passHref>
+                Login
+              </Link>
+            </Button>
+            <Button className="glassy-button">
+              <Link href="/sign-up" passHref>
+                Sign Up
+              </Link>
+            </Button>
           </SignedOut>
           <SignedIn>
             <UserButton />
@@ -24,95 +33,74 @@ export default function HomePage() {
 
       {/* Hero Section */}
       <Box sx={{ textAlign: 'center', my: 4 }}>
-        <Typography variant="h2" component="h1" gutterBottom>
-          Welcome to Flashcard SaaS
+        <Typography variant="h2" component="h1" className="glassy-header" gutterBottom>
+          Welcome to FlashWise
         </Typography>
         <Typography variant="h5" component="h2" gutterBottom>
-          The easiest way to create flashcards from your text.
+          Create Flashcards in Seconds
         </Typography>
-        <Button variant="contained" color="primary" sx={{ mt: 2, mr: 2 }} href="/generate">
+        <Button className="glassy-button" variant="contained" sx={{ mt: 2, mr: 2 }} href="/generate">
           Get Started
         </Button>
-        <Button variant="outlined" color="primary" sx={{ mt: 2 }}>
+        <Button className="glassy-button" variant="outlined" sx={{ mt: 2 }}>
           Learn More
         </Button>
       </Box>
 
       {/* Features Section */}
-      <Box sx={{ my: 6 }}>
-        <Typography variant="h4" component="h2" gutterBottom>
-          Features
+      <Box sx={{ my: 6, textAlign: 'center' }}>
+        <Typography variant="body1" sx={{ mb: 4, maxWidth: '800px', margin: '0 auto' }}>
+          Discover the powerful features of FlashWise that make flashcard creation easy and effective. From quick text import to customizable templates, and mobile-friendly access, we have everything you need to make studying a breeze.
         </Typography>
-        <Grid container spacing={4}>
-          {/* Feature items */}
-          <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6" component="h3" gutterBottom>
-              Easy Text Import
-            </Typography>
-            <Typography>
-              Import your text easily and create flashcards in just a few clicks.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6" component="h3" gutterBottom>
-              Customizable Templates
-            </Typography>
-            <Typography>
-              Choose from various templates to make your flashcards unique.
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6" component="h3" gutterBottom>
-              Mobile Friendly
-            </Typography>
-            <Typography>
-              Access and study your flashcards on any device, anywhere.
-            </Typography>
-          </Grid>
-        </Grid>
       </Box>
 
       {/* Pricing Section */}
       <Box sx={{ my: 6, textAlign: 'center' }}>
-        <Typography variant="h4" component="h2" gutterBottom>
-          Pricing
-        </Typography>
         <Grid container spacing={4} justifyContent="center">
           {/* Pricing plans */}
           <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6" component="h3" gutterBottom>
-              Free Plan
-            </Typography>
-            <Typography>
-              $0/month - Basic features and limited flashcards.
-            </Typography>
+            <Card className="pricingCard">
+              <CardContent>
+                <Typography variant="h6" component="h3" gutterBottom>
+                  Free Plan
+                </Typography>
+                <Typography variant="h5" component="p" gutterBottom>
+                  $0/month
+                </Typography>
+                <Typography>
+                  Basic features and limited flashcards.
+                </Typography>
+              </CardContent>
+            </Card>
           </Grid>
           <Grid item xs={12} sm={6} md={4}>
-            <Typography variant="h6" component="h3" gutterBottom>
-              Pro Plan
-            </Typography>
-            <Typography>
-              $9.99/month - Unlimited flashcards and premium features.
-            </Typography>
+            <Card className="pricingCard">
+              <CardContent>
+                <Typography variant="h6" component="h3" gutterBottom>
+                  Pro Plan
+                </Typography>
+                <Typography variant="h5" component="p" gutterBottom>
+                  $9.99/month
+                </Typography>
+                <Typography>
+                  Unlimited flashcards and premium features.
+                </Typography>
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
       </Box>
+
+      {/* Footer Section */}
+      <Box sx={{ mt: 6, py: 4, backgroundColor: '#333', color: '#fff', textAlign: 'center' }}>
+        <Typography variant="body2">
+          © {new Date().getFullYear()} FlashWise. All rights reserved.
+        </Typography>
+        <Typography variant="body2">
+          <a href="/privacy-policy" style={{ color: '#fff', textDecoration: 'none' }}>Privacy Policy</a> | 
+          <a href="/terms-of-service" style={{ color: '#fff', textDecoration: 'none' }}> Terms of Service</a>
+        </Typography>
+      </Box>
     </div>
   );
-}
-const handleSubmit = async () => {
-  const checkoutSession = await fetch('/api/checkout_sessions', {
-    method: 'POST',
-    headers: { origin: 'http://localhost:3000' },
-  })
-  const checkoutSessionJson = await checkoutSession.json()
-
-  const stripe = await getStripe()
-  const {error} = await stripe.redirectToCheckout({
-    sessionId: checkoutSessionJson.id,
-  })
-
-  if (error) {
-    console.warn(error.message)
-  }
 }
