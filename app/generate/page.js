@@ -102,7 +102,8 @@ export default function Generate() {
   };
 
   return (
-    <Container maxWidth="md">
+    <div className="flashcard-page">
+    <Container className="flashcard-container"  maxWidth="md" >
       <Box sx={{ my: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Generate Flashcards
@@ -120,12 +121,7 @@ export default function Generate() {
           sx={{
             mb: 2,
             "& .MuiInputBase-input": { color: "white" },
-            "& .MuiOutlinedInput-notchedOutline": {
-              borderColor: "blue",
-            },
-            "& .Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "blue",
-            },
+         
           }}
         />
         <Button
@@ -154,7 +150,7 @@ export default function Generate() {
                         sx={{ cursor: "pointer" }}
                       >
                         <CardContent>
-                          <Typography variant="h6">Front:</Typography>
+                          <Typography variant="h6"></Typography>
                           <Typography>{flashcard.front}</Typography>
                         </CardContent>
                       </Card>
@@ -163,7 +159,7 @@ export default function Generate() {
                         sx={{ cursor: "pointer" }}
                       >
                         <CardContent>
-                          <Typography variant="h6">Back:</Typography>
+                          <Typography variant="h6"></Typography>
                           <Typography>{flashcard.back}</Typography>
                         </CardContent>
                       </Card>
@@ -210,5 +206,6 @@ export default function Generate() {
         )}
       </Box>
     </Container>
+    </div>
   );
 }
